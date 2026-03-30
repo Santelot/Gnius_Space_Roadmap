@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gnius Space — Product Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   GNIUS SPACE — PRODUCT ROADMAP DASHBOARD
+   Theme & Design Tokens
+   ═══════════════════════════════════════════════════════ */
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #111118;
+  --bg-card: #16161f;
+  --bg-card-hover: #1c1c28;
+  --border: #25253a;
+  --border-glow: #33335a;
+  --text-primary: #e8e8f0;
+  --text-secondary: #8888a8;
+  --text-muted: #555570;
+  --accent-cyan: #00d4ff;
+  --accent-violet: #8b5cf6;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-rose: #f43f5e;
+  --accent-sky: #38bdf8;
+  --gradient-main: linear-gradient(135deg, #00d4ff 0%, #8b5cf6 100%);
+  --gradient-subtle: linear-gradient(135deg, rgba(0,212,255,0.08) 0%, rgba(139,92,246,0.08) 100%);
+  --font-display: 'Sora', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-card: 0 4px 30px rgba(0,0,0,0.4);
+  --shadow-glow: 0 0 40px rgba(0,212,255,0.06);
+}
+
+/* ═══════════════════════════════════════════════════════
+   Reset & Base
+   ═══════════════════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg-primary);
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Ambient background */
+body::before {
+  content: '';
+  position: fixed;
+  top: -40%; left: -20%;
+  width: 80vw; height: 80vw;
+  background: radial-gradient(circle, rgba(0,212,255,0.03) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -30%; right: -10%;
+  width: 60vw; height: 60vw;
+  background: radial-gradient(circle, rgba(139,92,246,0.03) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Header
+   ═══════════════════════════════════════════════════════ */
+.header {
+  position: relative;
+  z-index: 10;
+  padding: 3rem 2rem 2rem;
+  text-align: center;
+  animation: fadeDown 0.8s ease-out;
+}
+
+.header__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  background: var(--bg-secondary);
+}
+
+.header__badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent-emerald);
+  box-shadow: 0 0 8px var(--accent-emerald);
+  animation: pulse-dot 2s infinite;
+}
+
+.header__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 800;
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+}
+
+.header__subtitle {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Stats Bar
+   ═══════════════════════════════════════════════════════ */
+.stats-bar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  gap: 1px;
+  max-width: 640px;
+  margin: 2rem auto 3rem;
+  background: var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  animation: fadeUp 0.8s ease-out 0.15s both;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+  padding: 1rem 1.2rem;
+  background: var(--bg-secondary);
+}
+
+.stat:first-child { border-radius: var(--radius-md) 0 0 var(--radius-md); }
+.stat:last-child { border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+
+.stat__number {
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+}
+
+.stat__label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 0.15rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Filters
+   ═══════════════════════════════════════════════════════ */
+.filters {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 2rem 3rem;
+  animation: fadeUp 0.8s ease-out 0.25s both;
+}
+
+.filter-btn {
+  padding: 0.45rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  border-color: var(--border-glow);
+  color: var(--text-primary);
+  background: var(--bg-card);
+}
+
+.filter-btn.active {
+  background: var(--gradient-main);
+  border-color: transparent;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Timeline
+   ═══════════════════════════════════════════════════════ */
+.timeline {
+  position: relative;
+  z-index: 10;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 2rem 6rem;
+}
+
+/* Vertical line */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: calc(2rem + 19px);
+  top: 0;
+  bottom: 4rem;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--border) 0%, var(--border-glow) 50%, transparent 100%);
+}
+
+/* ═══════════════════════════════════════════════════════
+   Quarter Group
+   ═══════════════════════════════════════════════════════ */
+.quarter-group {
+  margin-bottom: 3rem;
+}
+
+.quarter-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.6s ease-out both;
+}
+
+.quarter-label__dot {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--border-glow);
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.quarter-label__dot svg {
+  width: 16px; height: 16px;
+  stroke: var(--accent-cyan);
+}
+
+.quarter-label__text {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.quarter-label__range {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: 0.3rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Feature Card
+   ═══════════════════════════════════════════════════════ */
+.feature-card {
+  position: relative;
+  margin-left: 58px;
+  margin-bottom: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: fadeUp 0.6s ease-out both;
+  cursor: default;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  left: -28px;
+  top: 1.55rem;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--border-glow);
+  background: var(--bg-primary);
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  border-color: var(--border-glow);
+  background: var(--bg-card-hover);
+  box-shadow: var(--shadow-card), var(--shadow-glow);
+  transform: translateX(4px);
+}
+
+.feature-card:hover::before {
+  background: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px var(--accent-cyan);
+}
+
+.feature-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.feature-card__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.feature-card__status {
+  flex-shrink: 0;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.status-planning     { background: rgba(136,136,168,0.15); color: #9898b8; }
+.status-in-progress  { background: rgba(0,212,255,0.12);   color: var(--accent-cyan); }
+.status-testing      { background: rgba(245,158,11,0.12);  color: var(--accent-amber); }
+.status-done         { background: rgba(16,185,129,0.12);  color: var(--accent-emerald); }
+.status-blocked      { background: rgba(244,63,94,0.12);   color: var(--accent-rose); }
+
+.feature-card__desc {
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 0.9rem;
+}
+
+.feature-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.feature-card__tags {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover .tag {
+  border-color: var(--border-glow);
+  color: var(--text-secondary);
+}
+
+/* Progress bar */
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.progress__bar {
+  width: 80px;
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+
+.progress__fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--gradient-main);
+  transition: width 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+
+.progress__fill::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 20px; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+  border-radius: 0 99px 99px 0;
+}
+
+.progress__text {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 2.2rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Footer
+   ═══════════════════════════════════════════════════════ */
+.footer {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.footer a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Animations
+   ═══════════════════════════════════════════════════════ */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+/* Scroll-triggered reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .header { padding: 2rem 1.2rem 1.5rem; }
+  .timeline { padding: 0 1.2rem 4rem; }
+  .timeline::before { left: calc(1.2rem + 19px); }
+  .feature-card { margin-left: 50px; padding: 1rem 1.1rem; }
+  .feature-card::before { left: -22px; }
+  .stats-bar { margin: 1.5rem 1.2rem 2.5rem; }
+  .feature-card__meta { flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+  .progress__bar { width: 100px; }
+}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+ *
+ *  ██████╗ ███╗   ██╗██╗██╗   ██╗███████╗    ███████╗██████╗  █████╗  ██████╗███████╗
+ * ██╔════╝ ████╗  ██║██║██║   ██║██╔════╝    ██╔════╝██╔══██╗██╔══██╗██╔════╝██╔════╝
+ * ██║  ███╗██╔██╗ ██║██║██║   ██║███████╗    ███████╗██████╔╝███████║██║     █████╗
+ * ██║   ██║██║╚██╗██║██║██║   ██║╚════██║    ╚════██║██╔═══╝ ██╔══██║██║     ██╔══╝
+ * ╚██████╔╝██║ ╚████║██║╚██████╔╝███████║    ███████║██║     ██║  ██║╚██████╗███████╗
+ *  ╚═════╝ ╚═╝  ╚═══╝╚═╝ ╚═════╝ ╚══════╝    ╚══════╝╚═╝     ╚═╝  ╚═╝ ╚═════╝╚══════╝
+ *
+ *  PRODUCT ROADMAP — DATA CONFIGURATION
+ *  ─────────────────────────────────────
+ *  Edit ONLY this section to update the roadmap.
+ *  The page renders everything automatically from this data.
+ *
+ *  STATUS options : "planning" | "in-progress" | "testing" | "done" | "blocked"
+ *  PROGRESS       : 0 – 100  (percentage)
+ *  TAGS           : any strings you want (shown as pills on each card)
+ *
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+const ROADMAP_CONFIG = {
+
+  // ── Page Metadata ──────────────────────────────────────────────────
+  title: "Gnius Space",
+  subtitle: "Product Roadmap & Feature Tracker",
+  footerText: "Gnius Club · Genius Academy S.A.P.I. de C.V.",
+
+  // ── Quarters / Time Periods ────────────────────────────────────────
+  // Each quarter groups features under a labeled timeframe.
+  // 'id' must be unique and is used to link features.
+
+  quarters: [
+    { id: "q2-2026", label: "Q2 2026", range: "Abr – Jun" },
+    { id: "q3-2026", label: "Q3 2026", range: "Jun – Ago" },
+  ],
+
+  // ── Features ───────────────────────────────────────────────────────
+  // Add, remove, or reorder features below.
+  // 'quarter' must match a quarter 'id' above.
+  //
+  //  {
+  //    title:    "Feature name",
+  //    desc:     "One-line description",
+  //    status:   "planning" | "in-progress" | "testing" | "done" | "blocked",
+  //    progress: 0-100,
+  //    quarter:  "q2-2026",
+  //    tags:     ["Tag A", "Tag B"]
+  //  }
+
+  features: [
+
+    // ─── Q2 2026 ───
+    {
+      title:    "Gnius Marketplace",
+      desc:     "Marketplace para compra de modelos impresos en 3D y herramientas de gestión de impresiones y gamificiación para profesores.",
+      status:   "testing",
+      progress: 80,
+      quarter:  "q2-2026",
+      tags:     ["Features", "Gamificación"],
+    },
+    {
+      title:    "Proyectos finales y pathfinder",
+      desc:     "Gestión de proyectos finales y alertas de implementación con base en tiempo restante del ciclo escolar.",
+      status:   "in-progress",
+      progress: 40,
+      quarter:  "q2-2026",
+      tags:     ["Innovación", "Gestión"],
+    },
+    {
+      title:    "Proyecto Final Module",
+      desc:     "Módulo dedicado para evaluación por rúbrica, leaderboard y gestión de certificaciones y Soulbound tokens.",
+      status:   "planning",
+      progress: 5,
+      quarter:  "q2-2026",
+      tags:     ["Innovación", "Gestión"],
+    },
+    // ─── Q3 2026 ───
+    {
+      title:    "Student Dashboard v2",
+      desc:     "Rediseño completo del dashboard de estudiantes con métricas de progreso en tiempo real y badges de logros.",
+      status:   "planning",
+      progress: 5,
+      quarter:  "q3-2026",
+      tags:     ["Frontend", "UX"],
+    },
+     {
+      title:    "Teacher Dashboard v2",
+      desc:     "Rediseño completo del dashboard de maestros con métricas de progreso en tiempo real y herramientas de gestión simplificadas con navegación mejorada.",
+      status:   "planning",
+      progress: 5,
+      quarter:  "q3-2026",
+      tags:     ["Frontend", "UX"],
+    },
+
+  ],
+};
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ *  🚫  STOP — YOU PROBABLY DON'T NEED TO EDIT BELOW THIS LINE  🚫
+ *  The rendering engine reads ROADMAP_CONFIG and builds the page.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+// ── Helpers ──
+const statusLabel = {
+  "planning":    "Planning",
+  "in-progress": "In Progress",
+  "testing":     "Testing",
+  "done":        "Done",
+  "blocked":     "Blocked",
+};
+
+const statusColors = {
+  "planning":    "--text-muted",
+  "in-progress": "--accent-cyan",
+  "testing":     "--accent-amber",
+  "done":        "--accent-emerald",
+  "blocked":     "--accent-rose",
+};
+
+function getStats(features) {
+  const total   = features.length;
+  const done    = features.filter(f => f.status === "done").length;
+  const active  = features.filter(f => f.status === "in-progress" || f.status === "testing").length;
+  const avgProg = total ? Math.round(features.reduce((s, f) => s + f.progress, 0) / total) : 0;
+  return { total, done, active, avgProg };
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ── Render ──
+function render(filter = "all") {
+  const { title, subtitle, footerText, quarters, features } = ROADMAP_CONFIG;
+  const stats = getStats(features);
+
+  const filteredFeatures = filter === "all"
+    ? features
+    : features.filter(f => f.status === filter);
+
+  const filtersHtml = `
+    <div class="filters">
+      ${["all", "planning", "in-progress", "testing", "done", "blocked"].map(f => `
+        <button class="filter-btn ${filter === f ? 'active' : ''}" data-filter="${f}">
+          ${f === "all" ? "All" : statusLabel[f]}
+        </button>
+      `).join('')}
+    </div>`;
+
+  const timelineHtml = quarters.map(q => {
+    const qFeatures = filteredFeatures.filter(f => f.quarter === q.id);
+    if (qFeatures.length === 0) return '';
+
+    const cardsHtml = qFeatures.map((f, i) => `
+      <div class="feature-card reveal" style="animation-delay: ${i * 0.08}s">
+        <div class="feature-card__header">
+          <span class="feature-card__title">${escapeHtml(f.title)}</span>
+          <span class="feature-card__status status-${f.status}">${statusLabel[f.status]}</span>
+        </div>
+        <div class="feature-card__desc">${escapeHtml(f.desc)}</div>
+        <div class="feature-card__meta">
+          <div class="feature-card__tags">
+            ${f.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+          </div>
+          <div class="progress">
+            <div class="progress__bar">
+              <div class="progress__fill" style="width: ${f.progress}%"></div>
+            </div>
+            <span class="progress__text">${f.progress}%</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    return `
+      <div class="quarter-group">
+        <div class="quarter-label reveal">
+          <div class="quarter-label__dot">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div>
+            <span class="quarter-label__text">${escapeHtml(q.label)}</span>
+            <span class="quarter-label__range">${escapeHtml(q.range)}</span>
+          </div>
+        </div>
+        ${cardsHtml}
+      </div>`;
+  }).join('');
+
+  document.getElementById('app').innerHTML = `
+    <header class="header">
+      <div class="header__badge">Live Roadmap</div>
+      <h1 class="header__title">${escapeHtml(title)}</h1>
+      <p class="header__subtitle">${escapeHtml(subtitle)}</p>
+    </header>
+
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat__number" style="color: var(--text-primary)">${stats.total}</div>
+        <div class="stat__label">Features</div>
+      </div>
+      <div class="stat">
+        <div class="stat__number" style="color: var(--accent-cyan)">${stats.active}</div>
+        <div class="stat__label">In Progress</div>
+      </div>
+      <div class="stat">
+        <div class="stat__number" style="color: var(--accent-emerald)">${stats.done}</div>
+        <div class="stat__label">Shipped</div>
+      </div>
+      <div class="stat">
+        <div class="stat__number" style="color: var(--accent-violet)">${stats.avgProg}%</div>
+        <div class="stat__label">Avg Progress</div>
+      </div>
+    </div>
+
+    ${filtersHtml}
+
+    <div class="timeline">
+      ${timelineHtml || '<p style="text-align:center; color: var(--text-muted); padding: 3rem;">No features match this filter.</p>'}
+    </div>
+
+    <footer class="footer">
+      ${escapeHtml(footerText)} · Updated ${new Date().toLocaleDateString('es-MX', { year:'numeric', month:'long', day:'numeric' })}
+    </footer>`;
+
+  // Bind filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => render(btn.dataset.filter));
+  });
+
+  // Scroll reveal
+  requestAnimationFrame(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  });
+}
+
+// ── Boot ──
+document.addEventListener('DOMContentLoaded', () => render());
+</script>
+</body>
+</html>
